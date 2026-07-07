@@ -45,6 +45,12 @@ plot_net_charge_vs_ph(overview, save_path="charge_vs_ph.png")
 
 Some tooling is specific to both a protein class *and* an external platform (e.g. the nanobody CDR annotator is nanobody biology wrapped in a Google Sheets script). propro resolves this by organizing **by motif first**: a motif's interface-facing code lives inside that motif's own directory (`propro/motifs/<motif>/gscripts/`, `.../pymol/`, ...), alongside its Python code. `propro/interfaces/` is reserved for platform glue that is genuinely generic across motifs. `propro/interfaces/gscripts/REGISTRY.md` indexes every gscript in the repo regardless of where it physically lives, so nothing gets lost to this split.
 
+## `bench tools/`
+
+Turnkey scripts you run directly to get a practical output — not part of the installable `propro` package (only `propro*` is packaged; see `pyproject.toml`), but built on top of it. See `bench tools/README.md` for how this differs from `propro.motifs`/`propro.interfaces`.
+
+- **`reports/`** — generate a standalone document from propro calculations. First tool: `sequence_overview_pdf.py`, a one-page PDF with key properties, a net-charge-vs-pH chart, and the amino acid frequency table.
+
 ## Quick overview: what `compute_overview()` returns
 
 Given a sequence, `compute_overview()` returns a `ProteinOverview` with:
@@ -72,4 +78,4 @@ Property-engine tests (`tests/test_properties.py`) require BioPython and skip au
 
 ## Status
 
-Early / actively developed. `propro.core` (quick-overview functionality) is implemented. `propro.motifs.nanobodies` has its first tool (CDR annotation); other motifs and `propro.interfaces` are scaffolded placeholders for planned work.
+Early / actively developed. `propro.core` (quick-overview functionality) is implemented. `propro.motifs.nanobodies` has its first tool (CDR annotation); `bench tools/reports` has its first tool (sequence overview PDF); other motifs and `propro.interfaces` are scaffolded placeholders for planned work.

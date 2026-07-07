@@ -53,24 +53,41 @@ def plot_net_charge_vs_ph(
     ax.axhline(0, color="grey", linewidth=0.8, linestyle="-")
     ax.plot(ph_values, charges, color=color, linewidth=2, label=overview.id)
 
+    # Annotations default to sitting above their point, but that collides with
+    # the plot title (or the top spine) when the point is near the top of the
+    # y-range — flip below in that case (and vice versa near the bottom).
+    y_min, y_max = min(charges), max(charges)
+    y_span = (y_max - y_min) or 1.0
+
+    def _label_offset(value: float, near_edge: float = 6.0, far_edge: float = -14.0) -> tuple:
+        if value > y_max - 0.15 * y_span:
+            return (6, far_edge), "top"
+        if value < y_min + 0.15 * y_span:
+            return (6, -far_edge), "bottom"
+        return (6, near_edge), "bottom"
+
     if mark_pi and overview.isoelectric_point is not None:
         ax.axvline(overview.isoelectric_point, color="tab:red", linestyle="--", linewidth=1)
+        xytext, va = _label_offset(0.0)
         ax.annotate(
             f"pI {overview.isoelectric_point:.2f}",
             xy=(overview.isoelectric_point, 0),
-            xytext=(3, 6),
+            xytext=xytext,
             textcoords="offset points",
+            va=va,
             color="tab:red",
             fontsize=9,
         )
 
     if mark_ph7 and overview.net_charge_ph7 is not None:
         ax.scatter([7.0], [overview.net_charge_ph7], color="black", zorder=5, s=25)
+        xytext, va = _label_offset(overview.net_charge_ph7)
         ax.annotate(
             f"pH 7: {overview.net_charge_ph7:+.1f}",
             xy=(7.0, overview.net_charge_ph7),
-            xytext=(6, 6),
+            xytext=xytext,
             textcoords="offset points",
+            va=va,
             fontsize=9,
         )
 
@@ -78,6 +95,7 @@ def plot_net_charge_vs_ph(
     ax.set_ylabel("Net charge")
     ax.set_title(f"Net charge vs. pH — {overview.id}")
     ax.set_xlim(min(ph_values), max(ph_values))
+    ax.margins(y=0.15)
     ax.grid(alpha=0.3)
 
     if save_path:

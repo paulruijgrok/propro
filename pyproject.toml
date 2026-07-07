@@ -16,7 +16,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=7.0"]
+dev = ["pytest>=7.0", "pypdf>=3.0"]
 
 [tool.setuptools.packages.find]
 include = ["propro*"]
