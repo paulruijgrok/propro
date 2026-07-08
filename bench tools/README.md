@@ -6,6 +6,8 @@ This is a different axis from `propro/motifs` and `propro/interfaces`: those org
 
 ## Categories
 
-- **`reports/`** — generate a standalone document (PDF, etc.) summarizing a protein or set of proteins. See `reports/README.md` for the index.
+_None yet._ This folder is a placeholder for future turnkey scripts that genuinely shouldn't be importable library code (e.g. quick structure checks, batch sequence triage). Each will get its own subfolder here as it shows up.
 
-Future categories will get their own subfolder here as they show up (e.g. quick structure checks, batch sequence triage).
+## Moved out
+
+- **PDF reports** — the one-page sequence-overview PDF used to live here under `reports/`. It moved into the library at [`propro/interfaces/pdf_reports/`](../propro/interfaces/pdf_reports/) because a PDF is an output interface (parallel to `gscripts`/`pymol`) and the tool applies to any sequence, so it's more discoverable and reusable as `propro.interfaces.pdf_reports`. Run it with `python -m propro.interfaces.pdf_reports.sequence_overview_pdf`.

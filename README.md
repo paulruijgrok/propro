@@ -37,19 +37,19 @@ plot_net_charge_vs_ph(overview, save_path="charge_vs_ph.png")
   - `report.py` — text report, pandas DataFrame, and Markdown renderings of an overview.
   - `visualize.py` — net-charge-vs-pH and amino-acid-composition plots.
 - **`propro.motifs`** — protein-class-specific tooling.
-  - `nanobodies/` — VHH-specific tooling. Implemented: IMGT CDR1/2/3 annotation as a Google Sheets script (`gscripts/cdr_annotation.gs`; see its README for sheet layout and install steps).
+  - `nanobodies/` — VHH-specific tooling. Implemented: IMGT CDR1/2/3 annotation + property summary, as a Google Sheets script (`gscripts/cdr_annotation.gs`) and an Excel/VBA macro (`excel/cdr_annotation.bas`); see each folder's README for layout and install steps.
   - `antibodies/`, `enzymes/`, `complexes/` — *(not yet implemented)*.
-- **`propro.interfaces`** — *(scaffolded)* interfaces to external platforms that aren't tied to one motif: `gscripts` (Google Sheets), `pymol`.
+- **`propro.interfaces`** — interfaces to external platforms/output formats that aren't tied to one motif.
+  - `pdf_reports/` — render results as standalone PDFs. Implemented: `sequence_overview_pdf.py`, a one-page overview for any sequence (`python -m propro.interfaces.pdf_reports.sequence_overview_pdf`).
+  - `gscripts/` (Google Sheets), `excel/`, `pymol/` — generic platform glue; *(scaffolded)*.
 
 ### Where motif + interface code lives
 
-Some tooling is specific to both a protein class *and* an external platform (e.g. the nanobody CDR annotator is nanobody biology wrapped in a Google Sheets script). propro resolves this by organizing **by motif first**: a motif's interface-facing code lives inside that motif's own directory (`propro/motifs/<motif>/gscripts/`, `.../pymol/`, ...), alongside its Python code. `propro/interfaces/` is reserved for platform glue that is genuinely generic across motifs. `propro/interfaces/gscripts/REGISTRY.md` indexes every gscript in the repo regardless of where it physically lives, so nothing gets lost to this split.
+Some tooling is specific to both a protein class *and* an external platform (e.g. the nanobody CDR annotator is nanobody biology wrapped in a Google Sheets script). propro resolves this by organizing **by motif first**: a motif's interface-facing code lives inside that motif's own directory (`propro/motifs/<motif>/gscripts/`, `.../excel/`, `.../pymol/`, ...), alongside its Python code. `propro/interfaces/` is reserved for platform glue that is genuinely generic across motifs (like `pdf_reports/`, which works on any sequence). Per-platform registries index every script of that kind regardless of where it physically lives: `interfaces/gscripts/REGISTRY.md` (Google Sheets scripts), `interfaces/excel/REGISTRY.md` (Excel macros).
 
 ## `bench tools/`
 
-Turnkey scripts you run directly to get a practical output — not part of the installable `propro` package (only `propro*` is packaged; see `pyproject.toml`), but built on top of it. See `bench tools/README.md` for how this differs from `propro.motifs`/`propro.interfaces`.
-
-- **`reports/`** — generate a standalone document from propro calculations. First tool: `sequence_overview_pdf.py`, a one-page PDF with key properties, a net-charge-vs-pH chart, and the amino acid frequency table.
+Turnkey scripts you run directly to get a practical output — not part of the installable `propro` package (only `propro*` is packaged; see `pyproject.toml`), but built on top of it. See `bench tools/README.md` for how this differs from `propro.motifs`/`propro.interfaces`. Currently a placeholder: the one-page PDF report that used to live here now ships in the library as [`propro.interfaces.pdf_reports`](propro/interfaces/pdf_reports/).
 
 ## Quick overview: what `compute_overview()` returns
 
@@ -78,4 +78,4 @@ Property-engine tests (`tests/test_properties.py`) require BioPython and skip au
 
 ## Status
 
-Early / actively developed. `propro.core` (quick-overview functionality) is implemented. `propro.motifs.nanobodies` has its first tool (CDR annotation); `bench tools/reports` has its first tool (sequence overview PDF); other motifs and `propro.interfaces` are scaffolded placeholders for planned work.
+Early / actively developed. `propro.core` (quick-overview functionality) is implemented. `propro.motifs.nanobodies` has its first tool (CDR annotation + property summary, for Google Sheets and Excel); `propro.interfaces.pdf_reports` has its first tool (one-page sequence overview PDF). Other motifs and the remaining `propro.interfaces` platforms (generic `gscripts`/`excel`/`pymol` glue) are scaffolded placeholders for planned work.

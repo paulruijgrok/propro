@@ -1,11 +1,10 @@
-"""Tests for sequence_overview_pdf.py.
+"""Tests for propro.interfaces.pdf_reports.sequence_overview_pdf.
 
-Builds a ProteinOverview by hand (same pattern as tests/conftest.py in the
-main package) so this doesn't require BioPython — it only exercises PDF
-assembly, not the underlying property calculations.
+Builds a ProteinOverview by hand (same pattern as tests/conftest.py) so this
+doesn't require BioPython — it only exercises PDF assembly, not the underlying
+property calculations.
 """
 
-import sys
 from pathlib import Path
 
 import matplotlib
@@ -13,11 +12,11 @@ import pytest
 
 matplotlib.use("Agg")  # headless test environment
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
-sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-
 from propro.core.properties import ProteinOverview  # noqa: E402
-from sequence_overview_pdf import _wrapped, generate_sequence_overview_pdf  # noqa: E402
+from propro.interfaces.pdf_reports.sequence_overview_pdf import (  # noqa: E402
+    _wrapped,
+    generate_sequence_overview_pdf,
+)
 
 
 def _make_overview(**overrides) -> ProteinOverview:
